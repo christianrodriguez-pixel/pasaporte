@@ -1779,7 +1779,6 @@ function PassportPage() {
   const [isCardTurning, setIsCardTurning] = useState(false);
   const flipTimers = useRef<number[]>([]);
   const [tier, setTier] = useState<PassportTier>("base");
-  const navigate = useNavigate();
   const t = tierConfig[tier];
 
   const clearFlipTimers = () => {
@@ -1822,6 +1821,7 @@ function PassportPage() {
   };
 
   const flipTransform = flipPhase === "out" ? "rotateY(90deg)" : flipPhase === "snap" ? "rotateY(-90deg)" : "rotateY(0deg)";
+  const passportCardMinHeight = "clamp(570px, calc(100dvh - 196px), 670px)";
 
   const dotColor: Record<PassportTier, string> = {
     base: "#C5A364", gold: "#D4A94E", premium: "#DD053E", platinum: "#C9C1B2", black: "#091201",
@@ -1829,7 +1829,7 @@ function PassportPage() {
 
   return (
     <div className="min-h-dvh w-full bg-[#F9F7EB] pb-24">
-      <div className="px-5 pt-14 pb-3">
+      <div className="px-5 pt-12 pb-3">
         <div className="flex items-center justify-center gap-1">
           <h1 className="text-[#091201] text-center" style={{ fontSize: 24, fontWeight: 600 }}>
             Mi Pasaporte
@@ -1861,7 +1861,7 @@ function PassportPage() {
             onClick={handlePassportFlip}
             className="relative cursor-pointer"
             style={{
-              minHeight: "calc(100dvh - 220px)",
+              minHeight: passportCardMinHeight,
               isolation: "isolate",
               contain: "layout paint style",
               touchAction: "pan-y",
@@ -1892,7 +1892,7 @@ function PassportPage() {
                 willChange: "opacity, transform",
               }}
             >
-              <div className="p-6 h-full flex flex-col relative" style={{ background: t.gradient }}>
+              <div className="px-6 py-7 h-full flex flex-col relative" style={{ background: t.gradient }}>
                 {/* Liquid Glass layers — subtle */}
                 {t.overlay && (
                   <div className="absolute inset-0 pointer-events-none" style={{ background: t.overlay, zIndex: 1 }} />
@@ -1914,7 +1914,7 @@ function PassportPage() {
                 </div>
 
                 {/* ── Identity: photo + name + location ── */}
-                <div className="flex flex-col items-center mb-4" style={{ position: "relative", zIndex: 2 }}>
+                <div className="flex flex-col items-center mb-5" style={{ position: "relative", zIndex: 2 }}>
                   <div
                     className="w-24 h-28 rounded-2xl overflow-hidden mb-3 flex-shrink-0 mx-auto relative"
                     style={{
@@ -1939,7 +1939,7 @@ function PassportPage() {
                 </div>
 
                 {/* ── Main data: Vigencia · Edad · Institución ── */}
-                <div className="flex gap-2 mb-2.5" style={{ position: "relative", zIndex: 2 }}>
+                <div className="flex gap-2 mb-3" style={{ position: "relative", zIndex: 2 }}>
                   <DataField label="VIGENCIA" value="31/12/2026" t={t} flex={1.1} />
                   <div
                     className="rounded-xl px-2 py-2 flex flex-col items-center justify-center relative overflow-hidden"
@@ -1955,7 +1955,7 @@ function PassportPage() {
                   </div>
                 </div>
 
-                <div className="flex mb-3" style={{ position: "relative", zIndex: 2 }}>
+                <div className="flex mb-4" style={{ position: "relative", zIndex: 2 }}>
                   <InstitutionChip t={t} />
                 </div>
 
@@ -1998,7 +1998,7 @@ function PassportPage() {
                 willChange: "opacity, transform",
               }}
             >
-              <div className="p-6 h-full flex flex-col relative" style={{ background: t.gradientBack }}>
+              <div className="px-6 py-7 h-full flex flex-col relative" style={{ background: t.gradientBack }}>
                 {t.overlay && (
                   <div className="absolute inset-0 pointer-events-none" style={{ background: t.overlay, zIndex: 1 }} />
                 )}
@@ -2008,13 +2008,13 @@ function PassportPage() {
                 <div className="absolute top-0 left-0 right-0 h-28 rotate-180" style={{ opacity: t.waveOpacity, zIndex: 1 }}>
                   <WavePatternWide from={tierWaveColors[tier].from} to={tierWaveColors[tier].to} className="h-full" />
                 </div>
-                <div className="flex items-center justify-between mb-4" style={{ position: "relative", zIndex: 2 }}>
+                <div className="flex items-center justify-between mb-5" style={{ position: "relative", zIndex: 2 }}>
                   <span className="tracking-wider" style={{ fontSize: 11, fontWeight: 600, color: t.accent }}>CÓDIGO QR</span>
                   <TierBadge t={t} />
                 </div>
                 <div className="flex items-center justify-center my-2">
-                  <div className="w-52 h-52 bg-white rounded-2xl p-3 flex items-center justify-center" style={{ boxShadow: t.qrGlow, filter: "brightness(1.15)" }}>
-                    <svg width="180" height="180" viewBox="0 0 220 220" fill="none">
+                  <div className="w-44 h-44 bg-white rounded-2xl p-3 flex items-center justify-center" style={{ boxShadow: t.qrGlow, filter: "brightness(1.15)" }}>
+                    <svg width="154" height="154" viewBox="0 0 220 220" fill="none">
                       <rect x="10" y="10" width="60" height="60" rx="6" fill="#091201" />
                       <rect x="18" y="18" width="44" height="44" rx="3" fill="white" />
                       <rect x="26" y="26" width="28" height="28" rx="2" fill="#091201" />
@@ -2041,16 +2041,16 @@ function PassportPage() {
                     </svg>
                   </div>
                 </div>
-                <div className="text-center mb-3">
+                <div className="text-center mb-3" style={{ position: "relative", zIndex: 2 }}>
                   <p style={{ fontSize: 14, fontWeight: 500, color: t.textPrimary }}>María Fernanda López García</p>
                   <p className="font-mono mt-1" style={{ fontSize: 12, color: t.folioColor }}>PJ-TAM-2026-04821</p>
                 </div>
-                <div className="w-full h-px my-2" style={{ background: t.divider }} />
-                <div className="flex-1 min-h-0 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                <div className="w-full h-px my-1.5" style={{ background: t.divider, position: "relative", zIndex: 2 }} />
+                <div className="flex-1 min-h-0 overflow-y-auto pb-2" style={{ position: "relative", zIndex: 2 }} onClick={(e) => e.stopPropagation()}>
                   <p className="mb-2" style={{ fontSize: 10, fontWeight: 600, letterSpacing: 1, color: t.labelColor }}>HISTORIAL DE USO</p>
                   <div className="space-y-2">
                     {usageHistory.map((u) => (
-                      <div key={u.id} className="flex items-center gap-3 rounded-xl px-3 py-2.5 border" style={{ background: t.historyBg, borderColor: t.historyBorder }}>
+                      <div key={u.id} className="flex items-center gap-3 rounded-xl px-3 py-2 border" style={{ background: t.historyBg, borderColor: t.historyBorder }}>
                         <span style={{ fontSize: 18 }}>{u.icon}</span>
                         <div className="flex-1 min-w-0">
                           <p className="truncate" style={{ fontSize: 13, fontWeight: 500, color: t.textPrimary }}>{u.place}</p>
@@ -2060,10 +2060,6 @@ function PassportPage() {
                       </div>
                     ))}
                   </div>
-                </div>
-                <div className="mt-3 flex items-center justify-center gap-2" style={{ color: t.hintColor }}>
-                  <CreditCard size={14} />
-                  <span style={{ fontSize: 11 }}>Toca para ver datos</span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0" style={{ opacity: t.waveOpacity }}>
                   <WavePatternWide from={tierWaveColors[tier].from} to={tierWaveColors[tier].to} className="h-10" />
@@ -2077,16 +2073,6 @@ function PassportPage() {
         </AnimatePresence>
       </div>
 
-      {/* ── Discrete check-in access ── */}
-      <div className="px-5 mt-4">
-        <button
-          onClick={() => navigate("/checkin")}
-          className="w-full py-3 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/40 flex items-center justify-center gap-2 text-[#091201]/60 active:scale-[0.98] transition-transform"
-          style={{ fontSize: 13, fontWeight: 500 }}
-        >
-          <QrCode size={16} /> Check-in de evento
-        </button>
-      </div>
     </div>
   );
 }
