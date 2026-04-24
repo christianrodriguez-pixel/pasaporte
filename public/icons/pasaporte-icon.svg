@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Pasaporte Joven</title>
+  <desc id="desc">Icono de instalacion de Pasaporte Joven</desc>
+  <rect width="512" height="512" rx="112" fill="#59021D"/>
+  <path d="M0 341c49 5 82 25 142 19 77-8 98-56 178-63 65-6 105 21 192 5v210H0Z" fill="#C5A364"/>
+  <path d="M0 383c60 17 105 20 154 10 72-15 99-52 174-54 70-2 107 25 184 13v160H0Z" fill="#F9F7EB" opacity=".9"/>
+  <path d="M123 132h136c62 0 106 39 106 93 0 57-44 96-108 96h-47v80h-87Zm87 122h42c21 0 36-12 36-30 0-17-15-28-36-28h-42Z" fill="#F9F7EB"/>
+  <path d="M314 132h75v169c0 64-38 105-100 105-24 0-46-6-66-19l27-62c11 7 21 10 31 10 20 0 33-14 33-38Z" fill="#F9F7EB"/>
+</svg>

@@ -1,0 +1,39 @@
+{
+  "name": "Pasaporte Joven",
+  "short_name": "Pasaporte",
+  "description": "Beneficios y experiencias para juventudes de Tamaulipas.",
+  "lang": "es-MX",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F9F7EB",
+  "theme_color": "#59021D",
+  "categories": ["lifestyle", "government", "travel"],
+  "icons": [
+    {
+      "src": "/icons/pasaporte-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
