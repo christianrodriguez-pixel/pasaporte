@@ -1778,18 +1778,6 @@ function PassportPage() {
   const [tier, setTier] = useState<PassportTier>("base");
   const navigate = useNavigate();
   const t = tierConfig[tier];
-  const frontFaceVisibility = {
-    opacity: isFlipped ? 0 : 1,
-    pointerEvents: isFlipped ? "none" : "auto",
-    zIndex: isFlipped ? 1 : 2,
-    transition: "opacity 80ms linear 260ms",
-  } as const;
-  const backFaceVisibility = {
-    opacity: isFlipped ? 1 : 0,
-    pointerEvents: isFlipped ? "auto" : "none",
-    zIndex: isFlipped ? 2 : 1,
-    transition: "opacity 80ms linear 260ms",
-  } as const;
 
   const cycleTier = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -1830,14 +1818,12 @@ function PassportPage() {
           <motion.div
             key={tier}
             initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1, rotateY: isFlipped ? 180 : 0 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
             onClick={() => setIsFlipped(!isFlipped)}
             className="relative cursor-pointer"
             style={{
-              transformStyle: "preserve-3d",
-              WebkitTransformStyle: "preserve-3d",
               minHeight: "calc(100dvh - 220px)",
               isolation: "isolate",
               contain: "layout paint style",
@@ -1845,21 +1831,22 @@ function PassportPage() {
               willChange: "transform",
             }}
           >
+            <AnimatePresence mode="wait" initial={false}>
+              {!isFlipped ? (
+                <>
             {/* ─── FRONT FACE ─── */}
-            <div
+            <motion.div
+              key="passport-front"
+              initial={{ opacity: 0, rotateY: -72, scale: 0.98 }}
+              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+              exit={{ opacity: 0, rotateY: 72, scale: 0.98 }}
+              transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
               className="absolute inset-0 rounded-3xl overflow-hidden"
-              aria-hidden={isFlipped}
               style={{
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                transform: "rotateY(0deg) translateZ(0.1px)",
-                WebkitTransform: "rotateY(0deg) translateZ(0.1px)",
-                transformStyle: "preserve-3d",
-                WebkitTransformStyle: "preserve-3d",
                 boxShadow: t.shadow,
                 border: t.borderOuter ? `1px solid ${t.borderOuter}` : undefined,
+                transformOrigin: "center center",
                 willChange: "opacity, transform",
-                ...frontFaceVisibility,
               }}
             >
               <div className="p-6 h-full flex flex-col relative" style={{ background: t.gradient }}>
@@ -1953,23 +1940,24 @@ function PassportPage() {
                   <WavePattern variant="gold" className="h-10" />
                 </div>
               </div>
-            </div>
+            </motion.div>
+                </>
+              ) : (
+                <>
 
             {/* ─── BACK FACE ─── */}
-            <div
+            <motion.div
+              key="passport-back"
+              initial={{ opacity: 0, rotateY: -72, scale: 0.98 }}
+              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+              exit={{ opacity: 0, rotateY: 72, scale: 0.98 }}
+              transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
               className="absolute inset-0 rounded-3xl overflow-hidden"
-              aria-hidden={!isFlipped}
               style={{
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                transform: "rotateY(180deg) translateZ(0.1px)",
-                WebkitTransform: "rotateY(180deg) translateZ(0.1px)",
-                transformStyle: "preserve-3d",
-                WebkitTransformStyle: "preserve-3d",
                 boxShadow: t.shadow,
                 border: t.borderOuter ? `1px solid ${t.borderOuter}` : undefined,
+                transformOrigin: "center center",
                 willChange: "opacity, transform",
-                ...backFaceVisibility,
               }}
             >
               <div className="p-6 h-full flex flex-col relative" style={{ background: t.gradientBack }}>
@@ -2043,7 +2031,10 @@ function PassportPage() {
                   <WavePatternWide from={tierWaveColors[tier].from} to={tierWaveColors[tier].to} className="h-10" />
                 </div>
               </div>
-            </div>
+            </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </motion.div>
         </AnimatePresence>
       </div>
