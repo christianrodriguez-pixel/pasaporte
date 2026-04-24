@@ -8,7 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { RouterProvider } from "react-router";
 import { createBrowserRouter, Outlet, useLocation, useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Home,
@@ -1775,16 +1775,53 @@ function CurpStrip({ t }: { t: TierStyle }) {
 
 function PassportPage() {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [flipPhase, setFlipPhase] = useState<"idle" | "out" | "snap" | "in">("idle");
+  const [isCardTurning, setIsCardTurning] = useState(false);
+  const flipTimers = useRef<number[]>([]);
   const [tier, setTier] = useState<PassportTier>("base");
   const navigate = useNavigate();
   const t = tierConfig[tier];
 
+  const clearFlipTimers = () => {
+    flipTimers.current.forEach((timer) => window.clearTimeout(timer));
+    flipTimers.current = [];
+  };
+
+  useEffect(() => clearFlipTimers, []);
+
+  const handlePassportFlip = () => {
+    if (isCardTurning) return;
+
+    clearFlipTimers();
+    setIsCardTurning(true);
+    setFlipPhase("out");
+
+    flipTimers.current.push(
+      window.setTimeout(() => {
+        setIsFlipped((current) => !current);
+        setFlipPhase("snap");
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => setFlipPhase("in"));
+        });
+      }, 210),
+      window.setTimeout(() => {
+        setFlipPhase("idle");
+        setIsCardTurning(false);
+      }, 460),
+    );
+  };
+
   const cycleTier = (e: React.MouseEvent) => {
     e.stopPropagation();
+    clearFlipTimers();
     setIsFlipped(false);
+    setFlipPhase("idle");
+    setIsCardTurning(false);
     const idx = tierOrder.indexOf(tier);
     setTier(tierOrder[(idx + 1) % tierOrder.length]);
   };
+
+  const flipTransform = flipPhase === "out" ? "rotateY(90deg)" : flipPhase === "snap" ? "rotateY(-90deg)" : "rotateY(0deg)";
 
   const dotColor: Record<PassportTier, string> = {
     base: "#C5A364", gold: "#D4A94E", premium: "#DD053E", platinum: "#C9C1B2", black: "#091201",
@@ -1821,7 +1858,7 @@ function PassportPage() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-            onClick={() => setIsFlipped(!isFlipped)}
+            onClick={handlePassportFlip}
             className="relative cursor-pointer"
             style={{
               minHeight: "calc(100dvh - 220px)",
@@ -1831,16 +1868,22 @@ function PassportPage() {
               willChange: "transform",
             }}
           >
-            <AnimatePresence mode="wait" initial={false}>
+            <div
+              className="relative h-full"
+              style={{
+                minHeight: "inherit",
+                transform: flipTransform,
+                WebkitTransform: flipTransform,
+                transformStyle: "preserve-3d",
+                WebkitTransformStyle: "preserve-3d",
+                transition: flipPhase === "snap" ? "none" : "transform 220ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "transform",
+              }}
+            >
               {!isFlipped ? (
                 <>
             {/* ─── FRONT FACE ─── */}
-            <motion.div
-              key="passport-front"
-              initial={{ opacity: 0, rotateY: -72, scale: 0.98 }}
-              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-              exit={{ opacity: 0, rotateY: 72, scale: 0.98 }}
-              transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+            <div
               className="absolute inset-0 rounded-3xl overflow-hidden"
               style={{
                 boxShadow: t.shadow,
@@ -1940,18 +1983,13 @@ function PassportPage() {
                   <WavePattern variant="gold" className="h-10" />
                 </div>
               </div>
-            </motion.div>
+            </div>
                 </>
               ) : (
                 <>
 
             {/* ─── BACK FACE ─── */}
-            <motion.div
-              key="passport-back"
-              initial={{ opacity: 0, rotateY: -72, scale: 0.98 }}
-              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-              exit={{ opacity: 0, rotateY: 72, scale: 0.98 }}
-              transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+            <div
               className="absolute inset-0 rounded-3xl overflow-hidden"
               style={{
                 boxShadow: t.shadow,
@@ -2031,10 +2069,10 @@ function PassportPage() {
                   <WavePatternWide from={tierWaveColors[tier].from} to={tierWaveColors[tier].to} className="h-10" />
                 </div>
               </div>
-            </motion.div>
+            </div>
                 </>
               )}
-            </AnimatePresence>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
