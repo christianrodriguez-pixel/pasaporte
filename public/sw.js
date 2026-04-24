@@ -1,5 +1,11 @@
-const CACHE_NAME = "pasaporte-joven-v1";
-const APP_SHELL = ["/", "/manifest.webmanifest", "/icons/pasaporte-icon.svg"];
+const CACHE_NAME = "pasaporte-joven-v2";
+const APP_SHELL = [
+  "/",
+  "/manifest.webmanifest",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/icons/maskable-512.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
