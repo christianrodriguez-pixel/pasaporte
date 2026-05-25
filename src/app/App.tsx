@@ -2949,7 +2949,7 @@ function ComingSoonPage() {
           className="mt-4 text-[#091201]"
           style={{ fontSize: "clamp(38px, 11vw, 58px)", fontWeight: 700, lineHeight: 1, letterSpacing: 0 }}
         >
-          Proximamente
+          Próximamente
         </h1>
         <p
           className="mt-5 max-w-[300px] text-[#59021D]/70"
