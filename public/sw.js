@@ -1,4 +1,4 @@
-const CACHE_NAME = "pasaporte-joven-v2";
+const CACHE_NAME = "pasaporte-joven-v3-coming-soon";
 const APP_SHELL = [
   "/",
   "/manifest.webmanifest",

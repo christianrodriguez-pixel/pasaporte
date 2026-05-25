@@ -247,7 +247,7 @@ function AppLayout() {
 function SplashPage() {
   const navigate = useNavigate();
   useEffect(() => {
-    const t = setTimeout(() => navigate("/onboarding"), 2800);
+    const t = setTimeout(() => navigate("/onboarding"), 5600);
     return () => clearTimeout(t);
   }, [navigate]);
 
@@ -2917,7 +2917,52 @@ const ErrorFallback = () => (
   </div>
 );
 
-const router = createBrowserRouter([
+const PUBLIC_COMING_SOON_MODE = true;
+
+function ComingSoonPage() {
+  return (
+    <main className="relative min-h-dvh w-full overflow-hidden bg-[#F9F7EB] text-[#091201]">
+      <div className="absolute inset-x-0 top-0 h-52 opacity-20">
+        <WavePatternWide from="#C5A364" to="#59021D" className="h-full" />
+      </div>
+      <div className="absolute inset-x-0 bottom-0 h-44 rotate-180 opacity-15">
+        <WavePatternWide from="#59021D" to="#C5A364" className="h-full" />
+      </div>
+      <section className="relative z-10 flex min-h-dvh flex-col items-center justify-center px-8 py-12 text-center">
+        <div
+          className="mb-8 flex h-20 w-20 items-center justify-center rounded-full border"
+          style={{
+            background: "linear-gradient(145deg, rgba(255,255,255,0.78), rgba(219,200,167,0.34))",
+            borderColor: "rgba(197,163,100,0.34)",
+            boxShadow: "0 18px 48px rgba(89,2,29,0.12)",
+          }}
+        >
+          <AppLogo color="#59021D" size={42} />
+        </div>
+        <p
+          className="tracking-[0.34em] text-[#59021D]/55"
+          style={{ fontSize: 11, fontWeight: 700 }}
+        >
+          PASAPORTE JOVEN
+        </p>
+        <h1
+          className="mt-4 text-[#091201]"
+          style={{ fontSize: "clamp(38px, 11vw, 58px)", fontWeight: 700, lineHeight: 1, letterSpacing: 0 }}
+        >
+          Proximamente
+        </h1>
+        <p
+          className="mt-5 max-w-[300px] text-[#59021D]/70"
+          style={{ fontSize: 15, fontWeight: 500, lineHeight: 1.45 }}
+        >
+          Agencia de Innovación e Inteligencia Digital Tamaulipas.
+        </p>
+      </section>
+    </main>
+  );
+}
+
+const appRoutes = [
   { path: "/", Component: SplashPage, errorElement: <ErrorFallback /> },
   { path: "/onboarding", Component: OnboardingPage, errorElement: <ErrorFallback /> },
   { path: "/register", Component: RegisterPage, errorElement: <ErrorFallback /> },
@@ -2946,7 +2991,13 @@ const router = createBrowserRouter([
     ],
   },
   { path: "/passport/qr", Component: QRFullscreenPage, errorElement: <ErrorFallback /> },
-]);
+];
+
+const comingSoonRoutes = [
+  { path: "*", Component: ComingSoonPage, errorElement: <ErrorFallback /> },
+];
+
+const router = createBrowserRouter(PUBLIC_COMING_SOON_MODE ? comingSoonRoutes : appRoutes);
 
 export default function App() {
   return <RouterProvider router={router} />;
